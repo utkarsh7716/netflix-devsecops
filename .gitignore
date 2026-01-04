@@ -1,0 +1,16 @@
+# Node / Next.js
+node_modules
+.next
+
+# Logs
+*.log
+
+# Env & secrets
+.env
+.env.*
+
+# Kubernetes
+.kube
+
+# OS
+.DS_Store
