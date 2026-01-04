@@ -218,7 +218,7 @@ Token credential
 
 
 
-7\. Dockerfile (Production-Ready)
+7\. Dockerfile
 
 
 
