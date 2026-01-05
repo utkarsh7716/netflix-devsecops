@@ -1,4 +1,3 @@
-cat <<EOF > k8s/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -19,5 +18,4 @@ spec:
           image: utkarsh7716/netflix:latest
           ports:
             - containerPort: 3000
-EOF
 
