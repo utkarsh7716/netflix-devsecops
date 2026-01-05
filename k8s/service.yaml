@@ -1,0 +1,15 @@
+cat <<EOF > k8s/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: netflix-svc
+  namespace: netflix
+spec:
+  type: NodePort
+  selector:
+    app: netflix
+  ports:
+    - port: 3000
+      targetPort: 3000
+      nodePort: 30007
+EOF

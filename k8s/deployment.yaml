@@ -1,0 +1,23 @@
+cat <<EOF > k8s/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: netflix
+  namespace: netflix
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: netflix
+  template:
+    metadata:
+      labels:
+        app: netflix
+    spec:
+      containers:
+        - name: netflix
+          image: utkarsh7716/netflix:latest
+          ports:
+            - containerPort: 3000
+EOF
+
