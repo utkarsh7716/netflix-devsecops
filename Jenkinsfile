@@ -5,13 +5,15 @@ pipeline {
     IMAGE_NAME = "utkarsh7716/netflix"
     IMAGE_TAG  = "latest"
     DOCKER_CREDS = credentials('dockerhub-creds')
+    SONAR_SCANNER_HOME = tool 'sonar-scanner'
   }
 
   stages {
 
-    stage('Checkout Source') {
+    stage('Checkout CI/CD Repo') {
       steps {
-        git url: 'https://github.com/gauri17-pro/nextflix.git'
+        git branch: 'main',
+            url: 'https://github.com/utkarsh7716/netflix-devsecops.git'
       }
     }
 
@@ -19,7 +21,7 @@ pipeline {
       steps {
         withSonarQubeEnv('sonarqube') {
           sh '''
-            sonar-scanner \
+            $SONAR_SCANNER_HOME/bin/sonar-scanner \
               -Dsonar.projectKey=netflix \
               -Dsonar.projectName=Netflix \
               -Dsonar.sources=.
@@ -30,7 +32,9 @@ pipeline {
 
     stage('Build Docker Image') {
       steps {
-        sh 'docker build -t $IMAGE_NAME:$IMAGE_TAG .'
+        sh '''
+          docker build -t $IMAGE_NAME:$IMAGE_TAG .
+        '''
       }
     }
 
@@ -42,14 +46,21 @@ pipeline {
         '''
       }
     }
+
+    stage('Deploy to Kubernetes') {
+      steps {
+        sh '''
+          kubectl apply -f k8s/deployment.yaml
+          kubectl apply -f k8s/service.yaml
+        '''
+      }
+    }
   }
 
   post {
     success {
-      echo "CI pipeline completed successfully"
-    }
-    failure {
-      echo "CI pipeline failed"
+      echo "CI + CD pipeline executed successfully"
     }
   }
 }
+
